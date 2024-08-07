@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header') %>
+
+    <h1>Manage Products</h1>
+
+    <!-- Product Form for Add or Update -->
+    <form id="product-form">
+      <input type="hidden" id="product-id" name="id" />
+
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required />
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
+
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" step="0.01" required />
+
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="image" />
+
+      <button type="submit">Save Product</button>
+    </form>
+
+    <!-- List of Products -->
+    <h2>Product List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="product-list">
+        <% products.forEach(product => { %>
+          <tr data-id="<%= product._id %>">
+            <td><%= product.title %></td>
+            <td><%= product.description %></td>
+            <td>$<%= product.price %></td>
+            <td><img src="/<%= product.image %>" alt="<%= product.title %>" width="50" /></td>
+            <td>
+              <button class="edit-button">Edit</button>
+              <button class="delete-button">Delete</button>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <%- include('partials/footer') %>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const productForm = document.getElementById('product-form');
+      const productList = document.getElementById('product-list');
+
+      // Handle form submission for adding/updating products
+      productForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(productForm);
+        const productId = formData.get('id');
+        const method = productId ? 'put' : 'post';
+        const url = productId ? `/products/${productId}` : '/products';
+
+        try {
+          await axios[method](url, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          window.location.reload();
+        } catch (error) {
+          console.error(error);
+          alert('Error saving product');
+        }
+      });
+
+      // Handle edit button clicks
+      productList.addEventListener('click', (e) => {
+        console.log('out')
+
+        if (e.target.classList.contains('edit-button')) {
+          const tr = e.target.closest('tr');
+          const productId = tr.dataset.id;
+          console.log('in')
+          const title = tr.children[0].textContent;
+          const description = tr.children[1].textContent;
+          const price = tr.children[2].textContent.replace('$', '');
+          const image = tr.children[3].querySelector('img').src;
+
+          document.getElementById('product-id').value = productId;
+          document.getElementById('title').value = title;
+          document.getElementById('description').value = description;
+          document.getElementById('price').value = price;
+        }
+      });
+
+      // Handle delete button clicks
+      productList.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('delete-button')) {
+          const productId = e.target.closest('tr').dataset.id;
+
+          if (confirm('Are you sure you want to delete this product?')) {
+            try {
+              await axios.delete(`/products/${productId}`);
+              window.location.reload();
+            } catch (error) {
+              console.error(error);
+              alert('Error deleting product');
+            }
+          }
+        }
+      });
+    </script>
+    <!-- Bootstrap JS (with Popper.js for modals) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+</html>
