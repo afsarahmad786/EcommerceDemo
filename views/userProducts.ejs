@@ -57,10 +57,14 @@
       document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', async e => {
           const productId = e.target.getAttribute('data-product-id');
-          const quantity = document.querySelector(`.quantity[data-product-id="${productId}"]`).value;
+          const quantityInput = document.querySelector(`.quantity[data-product-id="${productId}"]`);
+          const quantity = quantityInput.value;
+
           try {
             await axios.post('/cart', { productId, quantity });
             alert('Product added to cart');
+            quantityInput.value = 1;
+
           } catch (error) {
             console.error(error);
             alert('Failed to add product to cart');
