@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const session = require('express-session');
 const cors=require('cors')
 require('dotenv').config();
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
+app.use('/', cartRoutes);
 
 app.get('/', (req, res) => {
   res.render('index');

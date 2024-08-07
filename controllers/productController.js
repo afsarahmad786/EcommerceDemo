@@ -43,3 +43,14 @@ exports.deleteProduct = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// Get all products
+exports.getUserProducts = async (req, res) => {
+    try {
+      const products = await getAllProducts();
+      res.render('userProducts', { products });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
