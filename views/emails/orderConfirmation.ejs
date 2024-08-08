@@ -1,0 +1,41 @@
+<!-- views/emails/orderConfirmation.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+    h1 { color: #007BFF; }
+    .order-details { margin: 20px 0; }
+    .order-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .total { font-size: 1.5em; font-weight: bold; }
+    .footer { margin-top: 30px; font-size: 0.9em; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thank you for your order!</h1>
+    <p>Hello <%= order.user.name %>,</p>
+    <p>Your order has been successfully placed. Here are the details:</p>
+    <div class="order-details">
+      <% order.items.forEach(item => { %>
+        <div class="order-item">
+          <h2><%= item.product.title %></h2>
+          <p>Quantity: <%= item.quantity %></p>
+          <p>Price: $<%= item.product.price %></p>
+        </div>
+      <% }) %>
+    </div>
+    <div class="total">Total: $<%= order.totalPrice %></div>
+    <p>Shipping Address:</p>
+    <p><%= order.shippingAddress %></p>
+    <div class="footer">
+      <p>If you have any questions, feel free to contact us.</p>
+      <p>&copy; 2024 Your Store. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>

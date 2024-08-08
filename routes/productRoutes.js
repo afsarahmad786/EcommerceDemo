@@ -17,6 +17,7 @@ router.delete('/:id', authMiddleware, roleMiddleware('admin'), deleteProduct);
 // USER Routes
 // Route to get all User products
 router.get('/allproduct', authMiddleware, getUserProducts);
+router.get('/list', getUserProducts);
 
 
 module.exports = router;

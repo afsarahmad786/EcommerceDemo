@@ -1,4 +1,3 @@
-// controllers/cartController.js
 const cartService = require('../services/cartService');
 
 exports.addToCart = async (req, res) => {

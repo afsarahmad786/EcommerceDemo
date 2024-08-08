@@ -4,6 +4,9 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const checkoutRoutes = require('./routes/checkoutRoutes');
+const confirmationRoutes = require('./routes/orderConfirmationRoutes');
+
 const session = require('express-session');
 const cors=require('cors')
 require('dotenv').config();
@@ -37,6 +40,8 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/', cartRoutes);
+app.use('/', checkoutRoutes);
+app.use('/', confirmationRoutes);
 
 app.get('/', (req, res) => {
   res.render('index');

@@ -24,7 +24,6 @@
                   </div>
                 </div>
                 <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
-
               </div>
             </div>
           </div>
@@ -35,6 +34,8 @@
     <%- include('partials/footer') %>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+      const isLoggedIn = <%= JSON.stringify(!!user) %>; // Ensure valid JavaScript boolean value
+
       document.querySelectorAll('.increment').forEach(button => {
         button.addEventListener('click', e => {
           const productId = e.target.getAttribute('data-product-id');
@@ -56,6 +57,11 @@
 
       document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', async e => {
+          if (!isLoggedIn) {
+            alert('You need to log in first!');
+            return;
+          }
+          
           const productId = e.target.getAttribute('data-product-id');
           const quantityInput = document.querySelector(`.quantity[data-product-id="${productId}"]`);
           const quantity = quantityInput.value;
@@ -64,7 +70,6 @@
             await axios.post('/cart', { productId, quantity });
             alert('Product added to cart');
             quantityInput.value = 1;
-
           } catch (error) {
             console.error(error);
             alert('Failed to add product to cart');

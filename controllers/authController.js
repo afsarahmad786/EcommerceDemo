@@ -5,7 +5,7 @@ exports.register = async (req, res) => {
 
   try {
     const token = await registerUser(email, password, role);
-    req.session.token = token; // Store token in session
+    req.session.token = token; 
     req.session.user = { email, role };
     res.json({ message: 'Registration successful' });
     } catch (error) {
@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
 
   try {
     const [token,user] = await loginUser(email, password);
-    req.session.token = token; // Store token in session
+    req.session.token = token; 
     req.session.user = { email: user.email, role: user.role };
 
     res.json({ message: 'Login successful' });
